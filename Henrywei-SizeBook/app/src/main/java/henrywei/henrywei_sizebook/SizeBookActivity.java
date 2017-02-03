@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public class SizeBookActivity extends AppCompatActivity {
@@ -36,6 +38,7 @@ public class SizeBookActivity extends AppCompatActivity {
 
     private TextView count = (TextView) findViewById(R.id.count);
     private ListView userList;
+    private DateFormat df = DateFormat.getDateInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +74,7 @@ public class SizeBookActivity extends AppCompatActivity {
     public void addRecord(View view){
         currentRecord = null; //make sure currentrecord is not selecting a record
         Intent intent = new Intent(this, EditRecords.class);
-        startActivity(intent);
+        startActivityForResult(intent, RECORD_REQUEST);
     }
 
     /**
@@ -83,7 +86,7 @@ public class SizeBookActivity extends AppCompatActivity {
         //Taken from http://stackoverflow.com/questions/5265913/how-to-use-putextra-and-getextra-for-string-data
         //1-31-2017
         intent.putExtra("NAME", record.name);
-        intent.putExtra("DATE", record.date);
+        intent.putExtra("DATE", record.date.toString());
         intent.putExtra("NECK", record.neck);
         intent.putExtra("BUST", record.bust);
         intent.putExtra("CHEST", record.chest);
@@ -102,16 +105,20 @@ public class SizeBookActivity extends AppCompatActivity {
                 //add a new record
                 if (extras != null){
                     setResult(RESULT_OK);
+                    try{
+                        recordList.add(new Record(extras.getString("NAME"), df.parse(extras.getString("DATE")),extras.getDouble("NECK"),extras.getDouble("BUST"),
+                                extras.getDouble("CHEST"),extras.getDouble("WAIST"),extras.getDouble("HIP"),extras.getDouble("INSEAM"),extras.getString("COMMENT")));
 
-                    recordList.add(new Record(extras.getString("NAME"),extras.getString("DATE"),extras.getDouble("NECK"),extras.getDouble("BUST"),
-                            extras.getDouble("CHEST"),extras.getDouble("WAIST"),extras.getDouble("HIP"),extras.getDouble("INSEAM"),extras.getString("COMMENT")));
-
-                    adapter.notifyDataSetChanged();
-                    saveInFile();
-                    count.setText("Record Count: "+recordList.size());
+                        adapter.notifyDataSetChanged();
+                        saveInFile();
+                        count.setText("Record Count: "+recordList.size());
+                    }
+                    catch(ParseException e){
+                        throw new RuntimeException();
+                    }
                 }
             } else {
-                //check if editing record or deleting record
+                //Check if editing record or deleting record
                 if (extras == null){
                     //currentRecord is being deleted
                     setResult(RESULT_OK);
@@ -124,13 +131,17 @@ public class SizeBookActivity extends AppCompatActivity {
                 } else {
                     //currentRecord is being edited
                     setResult(RESULT_OK);
+                    try{
+                        recordList.add(new Record(extras.getString("NAME"), df.parse(extras.getString("DATE")),extras.getDouble("NECK"),extras.getDouble("BUST"),
+                                extras.getDouble("CHEST"),extras.getDouble("WAIST"),extras.getDouble("HIP"),extras.getDouble("INSEAM"),extras.getString("COMMENT")));
 
-                    currentRecord.updateRecord(extras.getString("NAME"),extras.getString("DATE"),extras.getDouble("NECK"),extras.getDouble("BUST"),
-                            extras.getDouble("CHEST"),extras.getDouble("WAIST"),extras.getDouble("HIP"),extras.getDouble("INSEAM"),extras.getString("COMMENT"));
-
-                    adapter.notifyDataSetChanged();
-                    saveInFile();
-                    count.setText("Record Count: "+recordList.size());
+                        adapter.notifyDataSetChanged();
+                        saveInFile();
+                        count.setText("Record Count: "+recordList.size());
+                    }
+                    catch(ParseException e){
+                        throw new RuntimeException();
+                    }
                 }
             }
         }

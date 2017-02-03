@@ -48,7 +48,7 @@ public class EditRecords extends AppCompatActivity{
         if (extras != null){
             //if record already exists, fill in fields
             nameField.setText(extras.getString("NAME"));
-            dateField.setText(extras.getString("DATE")); //??? special parameter for date?
+            dateField.setText(extras.getString("DATE"));
             neckField.setText(Double.toString(extras.getDouble("NECK")));
             bustField.setText(Double.toString(extras.getDouble("BUST")));
             chestField.setText(Double.toString(extras.getDouble("CHEST")));

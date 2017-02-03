@@ -1,12 +1,14 @@
 package henrywei.henrywei_sizebook;
 
+import java.util.Date;
+
 /**
  * Created by henry on 1/31/2017.
  */
 
 public class Record {
     String name;
-    String date;
+    Date date;
     Double neck;
     Double bust;
     Double chest;
@@ -15,7 +17,7 @@ public class Record {
     Double inseam;
     String comment;
 
-    public Record(String name, String date, Double neck, Double bust, Double chest, Double waist, Double hip, Double inseam, String comment){
+    public Record(String name, Date date, Double neck, Double bust, Double chest, Double waist, Double hip, Double inseam, String comment){
         //enter 0 into the optional fields if unknown, comment = ""
         this.name = name;
         this.date = date;
@@ -28,7 +30,7 @@ public class Record {
         this.comment = comment;
     }
 
-    public void updateRecord(String name, String date, Double neck, Double bust, Double chest, Double waist, Double hip, Double inseam, String comment){
+    public void updateRecord(String name, Date date, Double neck, Double bust, Double chest, Double waist, Double hip, Double inseam, String comment){
         this.name = name;
         this.date = date;
         this.neck = neck;
