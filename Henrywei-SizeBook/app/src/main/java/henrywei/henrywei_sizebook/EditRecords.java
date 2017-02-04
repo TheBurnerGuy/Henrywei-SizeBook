@@ -48,13 +48,25 @@ public class EditRecords extends AppCompatActivity{
         if (extras != null){
             //if record already exists, fill in fields
             nameField.setText(extras.getString("NAME"));
-            dateField.setText(extras.getString("DATE"));
-            neckField.setText(Double.toString(extras.getDouble("NECK")));
-            bustField.setText(Double.toString(extras.getDouble("BUST")));
-            chestField.setText(Double.toString(extras.getDouble("CHEST")));
-            waistField.setText(Double.toString(extras.getDouble("WAIST")));
-            hipField.setText(Double.toString(extras.getDouble("HIP")));
-            inseamField.setText(Double.toString(extras.getDouble("INSEAM")));
+            dateField.setText(extras.getString("DATE")); //??? special parameter for date?
+            if(extras.getDouble("NECK") != 0.0){
+                neckField.setText(Double.toString(extras.getDouble("NECK")));
+            }
+            if(extras.getDouble("BUST") != 0.0){
+                bustField.setText(Double.toString(extras.getDouble("BUST")));
+            }
+            if(extras.getDouble("CHEST") != 0.0){
+                chestField.setText(Double.toString(extras.getDouble("CHEST")));
+            }
+            if(extras.getDouble("WAIST") != 0.0){
+                waistField.setText(Double.toString(extras.getDouble("WAIST")));
+            }
+            if(extras.getDouble("HIP") != 0.0){
+                hipField.setText(Double.toString(extras.getDouble("HIP")));
+            }
+            if(extras.getDouble("INSEAM") != 0.0){
+                inseamField.setText(Double.toString(extras.getDouble("INSEAM")));
+            }
             commentField.setText(extras.getString("COMMENT"));
         }
 
@@ -62,8 +74,7 @@ public class EditRecords extends AppCompatActivity{
         removeButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
-                setResult(RESULT_OK);
-                setIntent(new Intent()); //return empty intent
+                setResult(RESULT_OK, new Intent()); //return empty intent
 
                 finish();
             }
@@ -75,20 +86,45 @@ public class EditRecords extends AppCompatActivity{
 
             public void onClick(View v) {
                 if (nameField.getText().toString().length()>0) {
-                    setResult(RESULT_OK);
 
                     Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+
                     intent.putExtra("NAME", nameField.getText().toString());
                     intent.putExtra("DATE", dateField.getText().toString());
-                    intent.putExtra("NECK", Double.parseDouble(neckField.getText().toString()));
-                    intent.putExtra("BUST", Double.parseDouble(bustField.getText().toString()));
-                    intent.putExtra("CHEST", Double.parseDouble(chestField.getText().toString()));
-                    intent.putExtra("WAIST", Double.parseDouble(waistField.getText().toString()));
-                    intent.putExtra("HIP", Double.parseDouble(hipField.getText().toString()));
-                    intent.putExtra("INSEAM", Double.parseDouble(inseamField.getText().toString()));
+                    try{
+                        intent.putExtra("NECK", Double.parseDouble(neckField.getText().toString()));
+                    }catch(NumberFormatException e){
+                        intent.putExtra("NECK", 0.0);
+                    }
+                    try{
+                        intent.putExtra("BUST", Double.parseDouble(bustField.getText().toString()));
+                    }catch(NumberFormatException e){
+                        intent.putExtra("BUST", 0.0);
+                    }
+                    try{
+                        intent.putExtra("CHEST", Double.parseDouble(chestField.getText().toString()));
+                    }catch(NumberFormatException e){
+                        intent.putExtra("CHEST", 0.0);
+                    }
+                    try{
+                        intent.putExtra("WAIST", Double.parseDouble(waistField.getText().toString()));
+                    }catch(NumberFormatException e){
+                        intent.putExtra("WAIST", 0.0);
+                    }
+                    try{
+                        intent.putExtra("HIP", Double.parseDouble(hipField.getText().toString()));
+                    }catch(NumberFormatException e){
+                        intent.putExtra("HIP", 0.0);
+                    }
+                    try{
+                        intent.putExtra("INSEAM", Double.parseDouble(inseamField.getText().toString()));
+                    }catch(NumberFormatException e){
+                        intent.putExtra("INSEAM", 0.0);
+                    }
+
                     intent.putExtra("COMMENT", commentField.getText().toString());
 
-                    setIntent(intent);
                     finish();
                 }
             }
